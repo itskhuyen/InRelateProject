@@ -100,7 +100,7 @@ g<-1
 for(i in 1:number_of_individual) {
 	for (j in i:number_of_individual) {
 		for(x in 1:K)	{
-			indiv1.etaik[x]<-etaik[i,x+5] #constant 5 from where??
+			indiv1.etaik[x]<-etaik[i,x+5] #constant 5 from where?? (x+5 is the offset to get the population column)
 		}
 		for(x in 1:K)	{
 			indiv2.etaik[x]<-etaik[j,x+5]
