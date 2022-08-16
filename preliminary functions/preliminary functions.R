@@ -45,7 +45,7 @@ computenumpairs <-function(indivqfile){
   return(getIndiv(indivqfile*(indivqfile-1)/2));
 }
 
-#get IBS mode (not sure...)
+#get IBS mode
 getIBS <- function(indiv1a, indiv1b, indiv2a, indiv2b){
   for(l in 3:ncol(hs)) #ncol(hs) gives total number of columns in datafram +2, does this work or need another formula	
     # Indentify IBS mode.
