@@ -40,7 +40,7 @@ getIndiv <- function(strfile){
   return(individual)
 }
 
-#compute the number of pairs 
+#compute the number of pairs
 computenumpairs <-function(indivqfile){
   return(getIndiv(indivqfile*(indivqfile-1)/2));
 }
@@ -68,4 +68,37 @@ getIBS <- function(indiv1a, indiv1b, indiv2a, indiv2b){
     if((indiv1a[l]!=indiv1b[l] && indiv2a[l]!=indiv2b[l] && indiv1a[l]!=indiv2a[l] && indiv1a[l]!=indiv2b[l] && indiv1b[l]!=indiv2a[l] && indiv1b[l]!=indiv2b[l]))
       IBS<-9
     return(IBS)
+}
+
+#calculate Fst
+Fst <- function(x, pop = NULL, quiet = TRUE, na.alleles = ""){
+  if (any(.checkPloidy(x) != 2))
+    stop("Fst() requires diploid data")
+  
+  NAMESX <- names(x)
+  if (is.null(pop)) {
+    ipop <- which(NAMESX == "population")
+    if (!length(ipop)) stop("no 'population' column in x")
+  } else {
+    if (is.numeric(pop) && length(pop) == 1) {
+      ipop <- pop
+    } else {
+      x$populationforthisanalysis <- factor(pop)
+      ipop <- length(x)
+    }
+  }
+}
+  
+#compute relatedness over all pairs of individuals
+computeRelatedness <-function(indiv1.etaik, indiv2.etaik){
+  for(i in 1:50) {
+    for (j in i:50) {
+      for(x in 1:K)	{
+        indiv1.etaik[x]<-etaik[i,x+5]
+      }
+      for(x in 1:K)	{
+        indiv2.etaik[x]<-etaik[j,x+5]
+      }
+    }
+  }
 }
