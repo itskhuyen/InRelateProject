@@ -4,7 +4,7 @@ getSubpop <- function(indivqfile){
   return(subpop)
 }
 
-#function for reading in indinvq
+#function for reading in indivq
 readIndivq <- function(indivqfile){
   indivq <- getSubpop(indivqfile);
   return(indivq)
@@ -23,7 +23,7 @@ readStr <- function(strfile){
 }
 
 #get unique alleles
-getAlles <- function(pklafile){
+getAlleles <- function(pklafile){
   groupAlleles <- aggregate(x = pklafile$V2, by = list(pklafile$V1), FUN = function(x) length(unique(x)));
   return(groupAlleles) #get the unique alleles within each loci
 }
@@ -69,25 +69,6 @@ getIBS <- function(indiv1a, indiv1b, indiv2a, indiv2b){
       IBS<-9
     return(IBS)
 }
-
-#calculate Fst
-Fst <- function(x, pop = NULL, quiet = TRUE, na.alleles = ""){
-  if (any(.checkPloidy(x) != 2))
-    stop("Fst() requires diploid data")
-  
-  NAMESX <- names(x)
-  if (is.null(pop)) {
-    ipop <- which(NAMESX == "population")
-    if (!length(ipop)) stop("no 'population' column in x")
-  } else {
-    if (is.numeric(pop) && length(pop) == 1) {
-      ipop <- pop
-    } else {
-      x$populationforthisanalysis <- factor(pop)
-      ipop <- length(x)
-    }
-  }
-}
   
 #compute relatedness over all pairs of individuals
 computeRelatedness <-function(indiv1.etaik, indiv2.etaik){
@@ -102,3 +83,4 @@ computeRelatedness <-function(indiv1.etaik, indiv2.etaik){
     }
   }
 }
+
