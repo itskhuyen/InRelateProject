@@ -119,3 +119,19 @@ test_that("check dataframe", {
   result <- getLoci(strfile)
   expect_true(is.data.frame(strfile))
 })
+
+#test functions for Fst function from Pegas
+# test is using Jaquar dataset from R package
+#test to check for diploid input
+test_that("check for non-diploid input", {
+  x <- jaguar
+  expect_error(Fst(x), "Fst() requires diploid data input")
+})
+
+#check for population assignment
+test_that("check for population assignment", {
+  x <- jaguar
+  expect_equal(Fst(x, pop = as.factor(4)), Fst(x, pop = as.factor(4)))
+})
+
+test_that("check ")
