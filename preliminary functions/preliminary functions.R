@@ -36,13 +36,14 @@ getLoci <- function(strfile){
 
 #get individual
 getIndiv <- function(strfile){
-  individual <- unique(strfile$V1);
+  individual <- as.numeric(unique(strfile$V1));
   return(individual)
 }
 
 #compute the number of pairs
 computenumpairs <-function(indivqfile){
-  return(getIndiv(indivqfile*(indivqfile-1)/2));
+  numpairs <-getIndiv(indivqfile*(indivqfile-1)/2);
+  return(numpairs);
 }
 
 #get IBS mode

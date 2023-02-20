@@ -74,7 +74,7 @@ test_that("sum of unique values in V1 is equal to 1", {
 #unit test
 test_that("get unique indiv", {
   result <- getIndiv(strfile)
-  expected <- unique(strfile$V1)
+  expected <- as.numeric(unique(strfile$V1))
   expect_equal(result,expected)
 })
 
@@ -134,4 +134,16 @@ test_that("check for population assignment", {
   expect_equal(Fst(x, pop = as.factor(4)), Fst(x, pop = as.factor(4)))
 })
 
-test_that("check ")
+#test function for computenumpairs
+#indiv function use in computenumpairs
+getIndiv <- function(strfile){
+  individual <- as.numeric(unique(strfile$V1));
+  return(individual)
+}
+
+#unit test
+test_that("compute number of pairs function properly", {
+  result <- computenumpairs(as.numeric(indivqfile))
+  expected <- getIndiv(as.numeric(indivqfile*(indivqfile-1)/2))
+  expect_equal(result,expected)
+})
