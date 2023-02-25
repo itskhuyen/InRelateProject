@@ -147,3 +147,10 @@ test_that("compute number of pairs function properly", {
   expected <- getIndiv(as.numeric(indivqfile*(indivqfile-1)/2))
   expect_equal(result,expected)
 })
+
+#check that getIndiv function is reporting the correct individuals
+test_that("get unique indiv", {
+  result <- getIndiv(strfile)
+  expected <- as.numeric(unique(strfile$V1))
+  expect_equal(result,expected)
+})
