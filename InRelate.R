@@ -84,7 +84,20 @@ getSubpop <- function(indivqfile){
 
 # Array that holds the final relatedness results. First column has the pair, second has the MC2013WI relatedness, third has MC2013 relatedness
 # Change dimensions according to the number of pairs. Here I have 50 pairs => total number of pairwise comparisons= 50*49/2 = 1225
-relat<-array(0,dim=c(1225,3))
+#get individuals to use for compute relatedness
+getIndiv <- function(strfile){
+  individual <- as.numeric(unique(strfile$V1));
+  return(individual)
+}
+
+#compute number of pairs
+computenumpairs <-function(indivqfile){
+  numpairs <-getIndiv(indivqfile*(indivqfile-1)/2);
+  return(numpairs);
+}
+
+relat<-array(0,dim=c(computenumpairs(indivqfile),3))
+#relat<-array(0,dim=c(1225,3))
 
 # Arrays for storing the etaiks. Should be of size K.
 
