@@ -33,6 +33,11 @@ readStr <- function(strfile){
 
 # Log Likelihood function that is to be maximized. Note the negative return
 # For maximization
+#get number of loci
+getLoci <- function(strfile){
+  loci <- length(strfile[,3:ncol(strfile)]);
+  return(loci)
+}
 
 loglikibd<-function(ibds) {
 # array has to be of dim=c(1, number of loci)
@@ -74,19 +79,22 @@ ineq1<-function(ibds){
 # Set value of K, number of subpopulations. This can be decided a priori based on sampling info, or 
 # by using STRUCTURE (Pritchard 2000), MULTICLUST (Sethuraman et al.), and the methods of Evanno et al. (2005)
 
-K<-3 #might not need this?
+#K<-3
 
 #function for getting K from indinvq file
 getSubpop <- function(indivqfile){
-  subpop <- indivqfile[,6:ncol(indivqfile)]
-  return(subpop)
+  K <- length(indivqfile[,6:ncol(indivqfile)])
+  return(K)
 }
+#define K
+K = getSubpop(indivqfile)
+#K<-3
 
 # Array that holds the final relatedness results. First column has the pair, second has the MC2013WI relatedness, third has MC2013 relatedness
 # Change dimensions according to the number of pairs. Here I have 50 pairs => total number of pairwise comparisons= 50*49/2 = 1225
 #get individuals to use for compute relatedness
 getIndiv <- function(strfile){
-  individual <- as.numeric(unique(strfile$V1));
+  individual <- length((unique(strfile$V1)));
   return(individual)
 }
 
@@ -97,7 +105,7 @@ computenumpairs <-function(indivqfile){
 }
 
 relat<-array(0,dim=c(computenumpairs(indivqfile),3))
-#relat<-array(0,dim=c(1225,3))
+#relat1<-array(0,dim=c(1225,3))
 
 # Arrays for storing the etaiks. Should be of size K.
 
@@ -105,8 +113,8 @@ indiv1.etaik<-array(dim=c(K))
 indiv2.etaik<-array(dim=c(K))
 
 # Predictor array should be of size = Number of Loci x 9
-
-predictors<-array(0,dim=c(300,9))
+#predictors<-array(0,dim=c(300,9))
+predictors<-array(0,dim=c(getLoci(strfile),9))
 
 # Allele frequency arrays for each of four alleles (assume diploid genotypes $A_{i}A_{j}$ and $A_{k}A_{l}$, two individuals).
 pklallelei<-array(dim=c(K))
@@ -140,10 +148,15 @@ computeRelatedness <-function(indiv1.etaik, indiv2.etaik){
 }
 	
 	# Storing the individual genotypes
-	indiv1a<-hs[i*2-1,]
-	indiv1b<-hs[i*2,]
-	indiv2a<-hs[j*2-1,]
-	indiv2b<-hs[j*2,]
+	#indiv1a<-hs[i*2-1,]
+	#indiv1b<-hs[i*2,]
+	#indiv2a<-hs[j*2-1,]
+	#indiv2b<-hs[j*2,]
+	
+	indiv1a<-strfile[i*2-1,]
+	indiv1b<-strfile[i*2,]
+	indiv2a<-strfile[j*2-1,]
+	indiv2b<-strfile[j*2,]
 
 	
 	#indiv1a<-hs[i,]
@@ -154,7 +167,7 @@ computeRelatedness <-function(indiv1.etaik, indiv2.etaik){
 	# Compute across loci. Here I have 300 loci, so skipping first two lines, run loop from 3 to 300+2=302
 
 	getIBS <- function(indiv1a, indiv1b, indiv2a, indiv2b){
-	  for(l in 3:ncol(hs)) #ncol(hs) gives total number of columns in datafram +2, does this work or need another formula	
+	  for(l in (3:ncol(strfile))+2) #ncol(hs) gives total number of columns in datafram +2, does this work or need another formula	
 	    # Indentify IBS mode.
 	    if(indiv1a[l]==indiv1b[l] && indiv1b[l]==indiv2a[l] && indiv2a[l] ==indiv2b[l])
 	      IBS<-1
@@ -179,11 +192,12 @@ computeRelatedness <-function(indiv1.etaik, indiv2.etaik){
 
 		# Number of uniquealleles in locus 1
 
-		length(which(pkla$V1==l-3))
-
+		#length(which(pkla$V1==l-3))
+	   length(which(pklafile$V1==l-3))
+	   
 		# Save locus1 as a subset
-
-		locus1<-subset(pkla, pkla$V1==l-3)
+		#locus1<-subset(pkla, pkla$V1==l-3)
+	   locus1<-subset(pklafile, pklafile$V1==l-3)
 
 		# Calculate coefficients under all S conditions:
 
@@ -607,7 +621,7 @@ predictors[l-2,7]<-d7
 predictors[l-2,8]<-d8
 predictors[l-2,9]<-d9
 
-}
+
 # Setting initial values for optimization.
 # You can change this if you like, if you know some of the related pairs. Else leave it be. 
 ibds<-c(0.0,0.0,0.0,0.0,0.0,0.0,0.25,0.5,0.25)

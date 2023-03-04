@@ -1,6 +1,6 @@
 #function for getting K from indinvq file
 getSubpop <- function(indivqfile){
-  subpop <- indivqfile[,6:ncol(indivqfile)]
+  subpop <- length(indivqfile[,6:ncol(indivqfile)])
   return(subpop)
 }
 
@@ -28,15 +28,15 @@ getAlleles <- function(pklafile){
   return(groupAlleles) #get the unique alleles within each loci
 }
 
-#get loci
+#get number of loci
 getLoci <- function(strfile){
-  loci <- strfile[,3:ncol(strfile)];
+  loci <- length(strfile[,3:ncol(strfile)]);
   return(loci)
 }
 
 #get individual
 getIndiv <- function(strfile){
-  individual <- as.numeric(unique(strfile$V1));
+  individual <- length((unique(strfile$V1)));
   return(individual)
 }
 
