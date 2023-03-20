@@ -608,18 +608,18 @@ computeRelatedness <-function(indiv1.etaik, indiv2.etaik){
 		    d7<-0
 		    d8<-0
 		    d9<-(zi1*zj1*zk2*zl2+zk1*zl1*zi2*zj2)/2
+		    
+		    #trying flexmix - might be old code...
+		    predictors[l-2,1]<-d1
+		    predictors[l-2,2]<-d2
+		    predictors[l-2,3]<-d3
+		    predictors[l-2,4]<-d4
+		    predictors[l-2,5]<-d5
+		    predictors[l-2,6]<-d6
+		    predictors[l-2,7]<-d7
+		    predictors[l-2,8]<-d8
+		    predictors[l-2,9]<-d9
 		  }}
-
-#trying flexmix - might be old code...
-predictors[l-2,1]<-d1
-predictors[l-2,2]<-d2
-predictors[l-2,3]<-d3
-predictors[l-2,4]<-d4
-predictors[l-2,5]<-d5
-predictors[l-2,6]<-d6
-predictors[l-2,7]<-d7
-predictors[l-2,8]<-d8
-predictors[l-2,9]<-d9
 
 
 # Setting initial values for optimization.
