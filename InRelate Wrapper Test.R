@@ -582,8 +582,8 @@ calculateRelatedness <- function(indiv1, indiv2) {
   
   loglikibd<-function(ibds) {
     # array has to be of dim=c(1, number of loci), comes after IBS function, then calc Coeff function -- what does that function return (return loop over every locus, )
-    loglik<-array(0,dim=c(1,300))
-    for(l in 1:300){
+    loglik<-array(0,dim=c(1,getLoci(strfile)))
+    for(l in 1:getLoci(strfile)){
       sumibdloci<-0
       for(i in 1:9){#constant
         sumibdloci<-sumibdloci+predictors[l,i]*ibds[i]
@@ -623,15 +623,22 @@ calculateRelatedness <- function(indiv1, indiv2) {
                  ineqfun = ineq1, ineqLB = c(0, 0, 0, 0, 0, 0, 0, 0, 0), 
                  ineqUB = c(1, 1, 1, 1, 1, 1, 1, 1, 1))
     return(mle)}
-  
+
   # Calculate the relatedness for MC2013WI method
   #relatedness1<-2*(mle$pars[1]+0.5*(mle$pars[3]+mle$pars[5]+mle$pars[7])+0.25*(mle$pars[8]))
-  calcRelatedness1 <- function(mle) {
-    2*(mle$pars[1]+0.5*(mle$pars[3]+mle$pars[5]+mle$pars[7])+0.25*(mle$pars[8]))}
+  #calcRelatedness1 <- function(mle) {
+   # 2*(mle$pars[1]+0.5*(mle$pars[3]+mle$pars[5]+mle$pars[7])+0.25*(mle$pars[8]))}
+  
+  calcRelatedness1 <- function(ibds) {
+    mle <- doOptimization(ibds)
+    return(2 * (mle$pars[1] + 0.5 * (mle$pars[3] + mle$pars[5] + mle$pars[7]) + 0.25 * (mle$pars[8])))
+  }
   
   # Append delta values to an output file - you can change name here as you like.
   # adding bootstrap code to this
+  filename1 <- "output.txt"
   deltafile<-paste(filename1,".deltas",sep="")
+  mle <- doOptimization(ibds)
   cat(c(mle$pars[1],mle$pars[2],mle$pars[3],mle$pars[4],mle$pars[5],mle$pars[6],mle$pars[7],mle$pars[8],mle$pars[9]),"\n",file=deltafile,append=TRUE)
   
   # Calculate relatedness for MC2013
@@ -639,14 +646,15 @@ calculateRelatedness <- function(indiv1, indiv2) {
   calcRelatedness2 <- function(mle) {
     2*(mle$pars[7]*0.5+0.25*mle$pars[8])}
   
+  
   # Loop controls - don't change!
   #r<-i-decrementi
   #s<-i+2-decrementj
   
   # Build relatedness table
   relat[g,1]<-sprintf("%d_%d",i,j)
-  relat[g,2]<-relatedness1
-  relat[g,3]<-relatedness2
+  relat[g,2]<-calcRelatedness1
+  relat[g,3]<-calcRelatedness2
   
   # Loop controls - don't change!
   #decrementj<-decrementj+2
@@ -657,6 +665,8 @@ calculateRelatedness <- function(indiv1, indiv2) {
   relatfile<-paste(filename1,".relat",sep="")
   write.table(relat,relatfile)
 }
+
+
 
 
 
