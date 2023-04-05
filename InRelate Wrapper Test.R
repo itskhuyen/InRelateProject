@@ -631,6 +631,7 @@ calculateRelatedness <- function(indiv1, indiv2) {
   
   calcRelatedness1 <- function(ibds) {
     mle <- doOptimization(ibds)
+    print(2 * (mle$pars[1] + 0.5 * (mle$pars[3] + mle$pars[5] + mle$pars[7]) + 0.25 * (mle$pars[8])))
     return(2 * (mle$pars[1] + 0.5 * (mle$pars[3] + mle$pars[5] + mle$pars[7]) + 0.25 * (mle$pars[8])))
   }
   
